@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace "com.sschoi.offlinedocviewer"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.sschoi.offlinedocviewer"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
+    implementation "androidx.appcompat:appcompat:1.7.0"
+    implementation "com.google.android.material:material:1.12.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+
+    // HWP 파일 처리 라이브러리
+    implementation "kr.dogfoot:hwplib:1.1.8"
+
+    // DOCX 처리 라이브러리 (docx4j)
+    implementation "org.docx4j:docx4j-core:11.4.10"
+
+    // PDF 변환 via XSL-FO
+    implementation "org.docx4j:docx4j-export-fo:11.4.7"
+
+    // Excel 처리 (Apache POI)
+    implementation "org.apache.poi:poi:5.2.3"
+    implementation "org.apache.poi:poi-ooxml:5.2.3"
+
+    // PDF 처리 (Apache PDFBox)
+    implementation "org.apache.pdfbox:pdfbox:2.0.29"
+
+    // Android PDF 뷰어
+    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
+
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+
+}
