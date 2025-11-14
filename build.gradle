@@ -1,6 +1,21 @@
+// Gradle 8.7+ / Android Gradle Plugin 8.6.0 기준
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 plugins {
-    id 'com.android.application' version '8.6.0' apply false
-    id 'com.android.library' version '8.6.0' apply false
+    id 'com.android.application' version '8.13.0' apply false
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
 }
 
 tasks.register("clean", Delete) {

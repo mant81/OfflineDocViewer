@@ -3,11 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 버튼 ID를 btnPickFile로 변경 -->
     <Button
-        android:id="@+id/btnConvert"
+        android:id="@+id/btnPickFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="문서 변환 및 보기" />
+        android:text="문서 선택 및 변환" />
 
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"

@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "com.sschoi.offlinedocviewer"
-        minSdk 24
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -22,34 +23,45 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packaging {
+        resources {
+            excludes += [
+                    "META-INF/LICENSE*",
+                    "META-INF/NOTICE*",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/versions/9/module-info.class"
+            ]
+        }
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url "https://jitpack.io" } // PDF Viewer
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
+    // AndroidX
     implementation "androidx.appcompat:appcompat:1.7.0"
     implementation "com.google.android.material:material:1.12.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.multidex:multidex:2.0.1"
 
-    // HWP 파일 처리 라이브러리
+    // HWP 파일 처리
     implementation "kr.dogfoot:hwplib:1.1.8"
 
-    // DOCX 처리 라이브러리 (docx4j)
-    implementation "org.docx4j:docx4j-core:11.4.10"
+    // DOCX 처리 (Apache POI)
+    implementation "org.apache.poi:poi:5.3.0"
+    implementation "org.apache.poi:poi-ooxml:5.3.0"
 
-    // PDF 변환 via XSL-FO
-    implementation "org.docx4j:docx4j-export-fo:11.4.7"
+    // PDF 처리 (PDFBox)
+    implementation "org.apache.pdfbox:pdfbox:2.0.30"
 
-    // Excel 처리 (Apache POI)
-    implementation "org.apache.poi:poi:5.2.3"
-    implementation "org.apache.poi:poi-ooxml:5.2.3"
-
-    // PDF 처리 (Apache PDFBox)
-    implementation "org.apache.pdfbox:pdfbox:2.0.29"
-
-    // Android PDF 뷰어
+    // Android PDF Viewer
     implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
 
+    // 로그 유틸
     implementation 'com.jakewharton.timber:timber:5.0.1'
-
-
 }
