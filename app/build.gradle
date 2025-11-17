@@ -52,14 +52,17 @@ dependencies {
     // HWP 파일 처리
     implementation "kr.dogfoot:hwplib:1.1.8"
 
-    // DOCX 처리 (Apache POI)
+    // DOCX/XLSX/PPTX 처리 (Apache POI)
     implementation "org.apache.poi:poi:5.3.0"
     implementation "org.apache.poi:poi-ooxml:5.3.0"
 
-    // PDF 처리 (PDFBox)
-    implementation "org.apache.pdfbox:pdfbox:2.0.30"
+    // ⛔ PDFBox (Android 미지원) → 제거
+    // implementation "org.apache.pdfbox:pdfbox:2.0.30"
 
-    // Android PDF Viewer
+    // ✅ Android에서 동작하는 PDF 라이브러리 (중요)
+    implementation "com.itextpdf:itextg:5.5.10"
+
+    // PDF Viewer
     implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
 
     // 로그 유틸
