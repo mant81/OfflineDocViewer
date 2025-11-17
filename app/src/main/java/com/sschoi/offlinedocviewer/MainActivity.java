@@ -1,7 +1,6 @@
 package com.sschoi.offlinedocviewer;
 
 import android.Manifest;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -17,12 +16,13 @@ import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
     private DocumentConverter converter;
-    private ActivityResultLauncher<Intent> filePickerLauncher;
+    private ActivityResultLauncher<android.content.Intent> filePickerLauncher;
     private PDFView pdfView;
 
     @Override
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
+        // 파일 선택 런처
         filePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -52,21 +53,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pickFile() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
         filePickerLauncher.launch(intent);
     }
 
     private void handleFile(Uri uri) {
         try {
-            // 임시 PDF 파일
-            String tempName = "converted_" + System.currentTimeMillis() + ".pdf";
-            File tempFile = new File(getCacheDir(), tempName);
+            // 임시 PDF 파일 경로
+            File tempFile = new File(getExternalFilesDir(null), "converted.pdf");
 
-            // PDF 변환
-            try (OutputStream out = new FileOutputStream(tempFile)) {
-                converter.convertToPdf(uri, out);
+            // URI → InputStream
+            try (InputStream is = getContentResolver().openInputStream(uri);
+                 OutputStream os = new FileOutputStream(tempFile)) {
+
+                // DocumentConverter에서 스트림 버전 호출
+                converter.convertToPdf(is, os);
             }
 
             if (!tempFile.exists() || tempFile.length() == 0) {
@@ -74,16 +77,18 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // PDFView 소프트웨어 렌더링 적용
+            // PDFView 소프트웨어 렌더링
             pdfView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
             // PDFView 로드
-            pdfView.fromFile(tempFile)
+            pdfView.post(() -> pdfView.fromFile(tempFile)
                     .enableSwipe(true)
                     .swipeHorizontal(false)
                     .enableDoubletap(true)
+                    .enableAnnotationRendering(true)
                     .enableAntialiasing(true)
-                    .load();
+                    .spacing(2)
+                    .load());
 
             Toast.makeText(this, "PDF 변환 완료!", Toast.LENGTH_SHORT).show();
 
